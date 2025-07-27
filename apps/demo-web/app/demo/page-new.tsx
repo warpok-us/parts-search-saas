@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { createAPIClient } from '../../lib/api-client';
 import { usePartsSearch } from '@partsy/ui';
+import type { PartDTO } from '@partsy/sdk';
 
 export default function DemoPage() {
   const [apiContext, setApiContext] = useState<ReturnType<typeof createAPIClient> | null>(null);
@@ -32,13 +33,13 @@ function DemoContent({ client, isUsingMockData }: ReturnType<typeof createAPICli
     initialCriteria: { limit: 10, page: 1 }
   });
 
-  const [selectedPart, setSelectedPart] = useState<any>(null);
+  const [selectedPart, setSelectedPart] = useState<PartDTO | null>(null);
 
   const handleSearch = async () => {
     await search();
   };
 
-  const handleFilterChange = (field: string, value: any) => {
+  const handleFilterChange = (field: string, value: string | number | boolean) => {
     updateCriteria({ [field]: value });
   };
 

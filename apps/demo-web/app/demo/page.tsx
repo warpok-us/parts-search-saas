@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useCallback } from 'react';
 
 // Import from public SDK (this would be: import { PartDTO, SearchPartsDTO, etc. } from '@partsy/sdk';)
 interface PartDTO {
@@ -259,7 +259,7 @@ export default function PartsDemo() {
     };
   }, []);
 
-  const handleSearch = async () => {
+  const handleSearch = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -270,7 +270,7 @@ export default function PartsDemo() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [searchCriteria]);
 
   const handleInputChange = (field: keyof SearchPartsDTO, value: string | number | boolean | undefined) => {
     setSearchCriteria(prev => ({
@@ -303,7 +303,7 @@ export default function PartsDemo() {
   ];
 
   // Check if a quick search filter is currently active
-  const isQuickSearchActive = (criteria: any) => {
+  const isQuickSearchActive = (criteria: { category?: string; maxPrice?: number; minPrice?: number; inStock?: boolean }) => {
     if (criteria.category) {
       return searchCriteria.category === criteria.category;
     }
@@ -332,7 +332,7 @@ export default function PartsDemo() {
   // Load initial data on mount
   React.useEffect(() => {
     handleSearch();
-  }, []);
+  }, [handleSearch]);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -498,7 +498,7 @@ export default function PartsDemo() {
             <div className="flex flex-wrap gap-2">
               {searchCriteria.name && (
                 <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                  Name: "{searchCriteria.name}"
+                  Name: &quot;{searchCriteria.name}&quot;
                   <button 
                     onClick={() => handleFilterRemove('name', '')}
                     className="ml-1 text-blue-600 hover:text-blue-800"
@@ -509,7 +509,7 @@ export default function PartsDemo() {
               )}
               {searchCriteria.partNumber && (
                 <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                  Part #: "{searchCriteria.partNumber}"
+                  Part #: &quot;{searchCriteria.partNumber}&quot;
                   <button 
                     onClick={() => handleFilterRemove('partNumber', '')}
                     className="ml-1 text-blue-600 hover:text-blue-800"
@@ -520,7 +520,7 @@ export default function PartsDemo() {
               )}
               {searchCriteria.category && (
                 <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                  Category: "{searchCriteria.category}"
+                  Category: &quot;{searchCriteria.category}&quot;
                   <button 
                     onClick={() => handleFilterRemove('category', '')}
                     className="ml-1 text-blue-600 hover:text-blue-800"

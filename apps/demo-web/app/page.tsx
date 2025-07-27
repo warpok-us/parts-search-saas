@@ -175,8 +175,8 @@ export default function Home() {
               Sample Parts Data
             </h2>
             <p className="text-gray-600 text-center mb-8">
-              Here's a preview of the test data available in our demo. 
-              Click "Launch Demo" to interact with the full dataset and search functionality.
+              Here&apos;s a preview of the test data available in our demo. 
+              Click &quot;Launch Demo&quot; to interact with the full dataset and search functionality.
             </p>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
               {mockPartsPreview.map((part) => (

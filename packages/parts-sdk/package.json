@@ -1,0 +1,22 @@
+{
+  "name": "@partsy/parts-sdk",
+  "version": "0.0.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsup src/index.ts --dts --format esm,cjs",
+    "dev": "tsup src/index.ts --watch",
+    "test": "jest",
+    "check-types": "tsc --noEmit",
+    "generate": "openapi-generator-cli generate"
+  },
+  "dependencies": {
+    "@partsy/shared-kernel": "workspace:*",
+    "@partsy/parts-application": "workspace:*"
+  },
+  "devDependencies": {
+    "@partsy/typescript-config": "workspace:*",
+    "tsup": "^8.0.0",
+    "@openapitools/openapi-generator-cli": "^2.5.2"
+  }
+}

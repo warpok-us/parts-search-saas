@@ -20,7 +20,11 @@
       "@parts-domain": ["packages/parts-domain/src"],
       "@parts-application": ["packages/parts-application/src"],
       "@parts-infrastructure": ["packages/parts-infrastructure/src"],
-      "@shared-kernel": ["packages/shared-kernel/src"]
+      "@shared-kernel": ["packages/shared-kernel/src"],
+      "@partsy/parts-domain": ["packages/parts-domain/src"],
+      "@partsy/parts-application": ["packages/parts-application/src"],
+      "@partsy/parts-infrastructure": ["packages/parts-infrastructure/src"],
+      "@partsy/shared-kernel": ["packages/shared-kernel/src"]
     }
   }
 }

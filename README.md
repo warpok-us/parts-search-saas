@@ -1,13 +1,10 @@
-# Turborepo starter
+# Parts Search SaaS - Domain-Driven Design Implementation
 
-This Turborepo starter is maintained by the Turborepo core team.
+This project demonstrates a clean implementation of Domain-Driven Design (DDD) principles for a parts search and inventory management system.
 
-## Using this example
+## Architecture Overview
 
-Run the following command:
-
-```sh
-npx create-turbo@latest
+The project follows DDD principles with clear separation of concerns across multiple layers:
 ```
 
 ## What's inside?

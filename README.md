@@ -1,6 +1,20 @@
-# Partsy - Parts Search SaaS SDK & UI Components
+# Parts Search SaaS
 
-> **Public Repository** - Stateless SDK, UI widgets, domain contracts, and examples for external consumption.
+A comprehensive parts search and inventory management SaaS platform built with modern web technologies, clean architecture principles, and SOLID design patterns.
+
+## 🏗️ Architecture Overview
+
+This project exemplifies **SOLID principles** and **Domain-Driven Design (DDD)**, organized as a monorepo using Turborepo. The architecture emphasizes maintainability, testability, and extensibility through dependency injection and strategy patterns.
+
+### 🎯 Key Features
+
+- ✅ **SOLID Principles Compliance** - All five principles implemented throughout
+- ✅ **Clean Architecture** - Domain-driven design with clear layer separation
+- ✅ **Strategy Pattern** - Pluggable behaviors for HTTP, retry, auth, and data transformation
+- ✅ **Dependency Injection** - Flexible configuration and easy testing
+- ✅ **Builder Pattern** - Fluent API for complex object construction
+- ✅ **Factory Pattern** - Simplified creation for common use cases
+- ✅ **TypeScript First** - Complete type safety and excellent developer experience
 
 ## 🚀 Quick Start
 

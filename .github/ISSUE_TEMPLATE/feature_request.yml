@@ -2,7 +2,7 @@ name: "\U0001F680 Feature request"
 description: Suggest an idea for Gearbox
 title: "[feat] "
 labels: ["enhancement"]
-projects: ["warpok/gearbox"]   # ← auto-adds issue to org project
+projects: ["warpok-us/gearbox"]   # ← auto-adds issue to org project
 body:
   - type: textarea
     id: description

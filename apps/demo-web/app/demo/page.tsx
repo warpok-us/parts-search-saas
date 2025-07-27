@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-// For demo purposes, we'll create simple mock implementations
+// Import from public SDK (this would be: import { PartDTO, SearchPartsDTO, etc. } from '@partsy/sdk';)
 interface PartDTO {
   id: string;
   partNumber: string;

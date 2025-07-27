@@ -1,4 +1,185 @@
-# Parts Search SaaS - Domain-Driven Design Implementation
+# Partsy - Parts Search SaaS SDK & UI Components
+
+> **Public Repository** - Stateless SDK, UI widgets, domain contracts, and examples for external consumption.
+
+## 🚀 Quick Start
+
+Install the packages you need:
+
+```bash
+# Core SDK for API communication
+pnpm add @partsy/sdk
+
+# Headless UI components and hooks
+pnpm add @partsy/ui
+
+# TypeScript configuration (optional)
+pnpm add -D @partsy/tsconfig
+```
+
+## 📦 Packages
+
+- **`@partsy/sdk`** - Stateless TypeScript client for parts search API
+- **`@partsy/ui`** - Headless React components and hooks with Tailwind styling
+- **`@partsy/parts-domain`** - Domain entities and contracts
+- **`@partsy/shared-utils`** - Shared utilities and helpers
+- **`@partsy/tsconfig`** - Shared TypeScript configuration
+
+## 🔧 Usage
+
+### Basic SDK Usage
+
+```typescript
+import { createPartsAPIClient } from '@partsy/sdk';
+
+const client = createPartsAPIClient({
+  baseUrl: 'https://api.partsy.com',
+  apiKey: 'your-api-key'
+});
+
+// Search for parts
+const results = await client.searchParts({
+  name: 'engine',
+  category: 'automotive',
+  inStock: true
+});
+
+// Get specific part
+const part = await client.getPartById('part-123');
+```
+
+### Headless UI Components
+
+```tsx
+import { PartsSearch, PartCard } from '@partsy/ui';
+import type { PartDTO } from '@partsy/ui';
+
+function MyPartsSearch({ parts }: { parts: PartDTO[] }) {
+  return (
+    <PartsSearch parts={parts}>
+      {({ parts, selectedPart, onPartSelect }) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {parts.map(part => (
+            <PartCard 
+              key={part.id} 
+              part={part}
+              isSelected={selectedPart?.id === part.id}
+              onSelect={onPartSelect}
+            >
+              {({ part, isSelected, onSelect, getStatusColor, formatPrice }) => (
+                <div 
+                  className={`p-4 border rounded-lg cursor-pointer ${
+                    isSelected ? 'ring-2 ring-blue-500' : ''
+                  }`}
+                  onClick={onSelect}
+                >
+                  <h3 className="font-semibold">{part.name}</h3>
+                  <p className="text-sm text-gray-600">{part.partNumber}</p>
+                  <div className="mt-2 flex justify-between items-center">
+                    <span className="font-bold">{formatPrice()}</span>
+                    <span className={`px-2 py-1 rounded text-xs ${getStatusColor()}`}>
+                      {part.status}
+                    </span>
+                  </div>
+                </div>
+              )}
+            </PartCard>
+          ))}
+        </div>
+      )}
+    </PartsSearch>
+  );
+}
+```
+
+### Custom Hooks
+
+```tsx
+import { usePartsSearch, usePartSelection } from '@partsy/ui';
+
+function SearchExample() {
+  const { 
+    results, 
+    loading, 
+    error, 
+    search, 
+    updateCriteria 
+  } = usePartsSearch({ 
+    client,
+    initialCriteria: { inStock: true }
+  });
+
+  const { selectedPart, selectPart, clearSelection } = usePartSelection();
+
+  return (
+    <div>
+      <button onClick={search} disabled={loading}>
+        {loading ? 'Searching...' : 'Search Parts'}
+      </button>
+      
+      {results && (
+        <div>
+          {results.parts.map(part => (
+            <button key={part.id} onClick={() => selectPart(part)}>
+              {part.name} - ${part.price}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+```
+
+## 🏗️ Architecture
+
+This is a **public-facing repository** following Domain-Driven Design principles:
+
+- **Stateless only** - No database credentials or private business logic
+- **ESM + strict TypeScript** - Modern module system with type safety
+- **Headless components** - Flexible UI components using render props
+- **No default exports** - Named exports for better tree-shaking
+
+## 🧪 Development
+
+```bash
+# Install dependencies
+pnpm install
+
+# Run tests
+pnpm test
+
+# Build all packages
+pnpm build
+
+# Run linting
+pnpm lint
+
+# Check types
+pnpm check-types
+```
+
+## 📋 Requirements
+
+- Node.js ≥ 18
+- pnpm ≥ 9.0.0
+- React ≥ 18.0.0 (for UI components)
+
+## 🤝 Contributing
+
+1. Follow the established patterns for stateless, public-facing code
+2. Maintain ≥ 90% test coverage
+3. Use Vitest for testing
+4. Components must be headless-friendly with render props
+5. Never include backend secrets or private business logic
+
+## 📄 License
+
+MIT License - see [LICENSE](./LICENSE) for details.
+
+---
+
+**Note**: This public repository contains only the stateless SDK and UI components. The private implementation details, infrastructure, and business logic are maintained separately.
 
 This project demonstrates a clean implementation of Domain-Driven Design (DDD) principles for a parts search and inventory management system.
 

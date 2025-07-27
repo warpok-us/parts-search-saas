@@ -1,16 +1,28 @@
 {
-  "name": "@partsy/shared-kernel",
+  "name": "@partsy/shared-utils",
   "version": "0.0.0",
+  "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "build": "tsup src/index.ts --dts --format esm,cjs",
-    "dev": "tsup src/index.ts --watch",
-    "test": "jest",
+    "build": "tsup src/index.ts --dts --format esm",
+    "dev": "tsup src/index.ts --watch --dts --format esm",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "check-types": "tsc --noEmit"
   },
   "devDependencies": {
-    "@partsy/typescript-config": "workspace:*",
-    "tsup": "^8.0.0"
+    "@partsy/tsconfig": "workspace:*",
+    "tsup": "^8.0.0",
+    "vitest": "^2.0.0"
   }
 }

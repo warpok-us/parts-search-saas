@@ -1,4 +1,4 @@
-import { PartsAPIClient, type PartsAPIConfig, type SearchPartsDTO, type SearchPartsResponseDTO, type PartDTO } from './index.js';
+import { PartsAPIClient, type PartsAPIConfig, type SearchPartsDTO, type SearchPartsResponseDTO, type PartDTO, type CreatePartDTO } from './index.js';
 import { getAPIConfig } from './config.js';
 
 export interface ClientFactoryOptions {
@@ -37,12 +37,35 @@ export class PartsAPIClientFactory {
 }
 
 // Mock client for development/testing
-export class MockPartsAPIClient extends PartsAPIClient {
+export class MockPartsAPIClient {
+  public config: PartsAPIConfig;
+
   constructor() {
-    super({ baseUrl: 'mock://api' });
+    this.config = { baseUrl: 'mock://api' };
   }
 
-  // Override methods with mock data
+  // Implement the same interface as PartsAPIClient
+  async createPart(dto: CreatePartDTO): Promise<PartDTO> {
+    // Simulate network delay
+    await new Promise(resolve => setTimeout(resolve, 200));
+    
+    // Generate a mock part with the provided data
+    const newPart: PartDTO = {
+      id: `mock-${Date.now()}`,
+      partNumber: dto.partNumber,
+      name: dto.name,
+      description: dto.description || '',
+      price: dto.price,
+      quantity: dto.quantity,
+      status: 'ACTIVE',
+      category: dto.category,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+    
+    return newPart;
+  }
+
   async searchParts(dto: SearchPartsDTO): Promise<SearchPartsResponseDTO> {
     // Simulate network delay
     await new Promise(resolve => setTimeout(resolve, 300));
@@ -67,14 +90,16 @@ export class MockPartsAPIClient extends PartsAPIClient {
     let filteredParts = mockParts;
     
     if (dto.name) {
+      const nameFilter = dto.name.toLowerCase();
       filteredParts = filteredParts.filter(p => 
-        p.name.toLowerCase().includes(dto.name!.toLowerCase())
+        p.name.toLowerCase().includes(nameFilter)
       );
     }
     
     if (dto.category) {
+      const categoryFilter = dto.category.toLowerCase();
       filteredParts = filteredParts.filter(p => 
-        p.category.toLowerCase() === dto.category!.toLowerCase()
+        p.category.toLowerCase() === categoryFilter
       );
     }
 
@@ -102,5 +127,27 @@ export class MockPartsAPIClient extends PartsAPIClient {
       createdAt: new Date(),
       updatedAt: new Date()
     };
+  }
+
+  async updatePart(id: string, dto: Partial<CreatePartDTO>): Promise<PartDTO> {
+    await new Promise(resolve => setTimeout(resolve, 200));
+    
+    return {
+      id,
+      partNumber: dto.partNumber || 'MOCK-001',
+      name: dto.name || 'Mock Part',
+      description: dto.description || 'This is a mock part for testing',
+      price: dto.price || 100.00,
+      quantity: dto.quantity || 10,
+      status: 'ACTIVE',
+      category: dto.category || 'Mock',
+      createdAt: new Date(Date.now() - 86400000), // 1 day ago
+      updatedAt: new Date()
+    };
+  }
+
+  async deletePart(id: string): Promise<void> {
+    await new Promise(resolve => setTimeout(resolve, 200));
+    // Mock delete - nothing to return
   }
 }

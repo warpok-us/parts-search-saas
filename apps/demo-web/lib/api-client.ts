@@ -1,13 +1,28 @@
 'use client';
 
-import { PartsAPIClientFactory, PartsAPIClient } from '@partsy/sdk';
+import { PartsAPIClientFactory } from '@partsy/sdk';
+import type { PartDTO, CreatePartDTO, SearchPartsDTO, SearchPartsResponseDTO } from '@partsy/sdk';
+
+// Interface for the public API methods that both clients implement
+export interface PartsAPIClientInterface {
+  createPart(dto: CreatePartDTO): Promise<PartDTO>;
+  searchParts(dto: SearchPartsDTO): Promise<SearchPartsResponseDTO>;
+  getPartById(id: string): Promise<PartDTO>;
+  updatePart(id: string, dto: Partial<CreatePartDTO>): Promise<PartDTO>;
+  deletePart(id: string): Promise<void>;
+}
 
 export interface APIContextType {
-  client: PartsAPIClient;
+  client: PartsAPIClientInterface;
   isUsingMockData: boolean;
 }
 
-export function createAPIClient(): APIContextType {
+export function createAPIClient(): APIContextType | null {
+  // Only create the client on the client side to avoid SSR issues
+  if (typeof window === 'undefined') {
+    return null;
+  }
+  
   const useMockData = process.env.NEXT_PUBLIC_USE_MOCK_DATA === 'true';
   
   if (useMockData) {

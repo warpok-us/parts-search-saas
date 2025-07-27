@@ -27,19 +27,19 @@ interface DemoFeature {
 const demoFeatures: DemoFeature[] = [
   {
     title: 'Parts Search Demo',
-    description: 'Interactive search with filters, real-time results, and component showcase',
+    description: 'Interactive search with filters, real-time results, and API integration showcase',
     href: '/demo',
     icon: '🔍'
   },
   {
-    title: 'Domain-Driven Design',
-    description: 'Explore how our application layer, domain, and infrastructure work together',
+    title: 'Real API Integration',
+    description: 'Switch between mock data and real API with comprehensive error handling',
     href: '/demo',
-    icon: '🏗️'
+    icon: '�'
   },
   {
     title: 'Component Library',
-    description: 'Reusable UI components built with TypeScript and modern React patterns',
+    description: 'Headless UI components built with TypeScript and modern React patterns',
     href: '/demo',
     icon: '🧩'
   },
@@ -165,6 +165,52 @@ export default function Home() {
                 </p>
               </Link>
             ))}
+          </div>
+        </section>
+
+        {/* API Integration Section */}
+        <section className="mb-16">
+          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-200">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                🌐 Real API Integration Ready
+              </h2>
+              <p className="text-gray-600 mb-6 max-w-3xl mx-auto">
+                Our SDK is production-ready for real API integration. Switch seamlessly between mock data 
+                for development and real backend services for production with comprehensive error handling 
+                and retry logic.
+              </p>
+            </div>
+            
+            <div className="grid md:grid-cols-2 gap-8">
+              <div className="bg-white rounded-lg p-6 shadow-md">
+                <div className="flex items-center mb-4">
+                  <span className="text-2xl mr-3">🧪</span>
+                  <h3 className="text-xl font-semibold text-gray-900">Development Mode</h3>
+                </div>
+                <p className="text-gray-600 mb-4">
+                  Currently running with mock data for demonstration. Perfect for development, 
+                  testing, and showcasing functionality without backend dependencies.
+                </p>
+                <div className="bg-yellow-50 border border-yellow-200 rounded-md p-3">
+                  <code className="text-sm text-yellow-800">NEXT_PUBLIC_USE_MOCK_DATA=true</code>
+                </div>
+              </div>
+              
+              <div className="bg-white rounded-lg p-6 shadow-md">
+                <div className="flex items-center mb-4">
+                  <span className="text-2xl mr-3">🚀</span>
+                  <h3 className="text-xl font-semibold text-gray-900">Production Ready</h3>
+                </div>
+                <p className="text-gray-600 mb-4">
+                  Switch to real API integration with a simple environment variable change. 
+                  Includes authentication, error handling, and retry logic out of the box.
+                </p>
+                <div className="bg-green-50 border border-green-200 rounded-md p-3">
+                  <code className="text-sm text-green-800">NEXT_PUBLIC_USE_MOCK_DATA=false</code>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 

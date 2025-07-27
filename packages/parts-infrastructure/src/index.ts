@@ -1,1 +1,1 @@
-export * from './repositories/InMemoryPartRepository';
+export * from './repositories/InMemoryPartRepository.js';

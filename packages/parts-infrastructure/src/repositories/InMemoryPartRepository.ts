@@ -1,4 +1,4 @@
-import { Result } from '../../../shared-kernel/src';
+import { Result } from '@partsy/shared-utils';
 import { 
   Part, 
   PartRepository, 
@@ -10,7 +10,7 @@ import {
   Quantity,
   PartStatus,
   Category
-} from '../../../parts-domain/src';
+} from '@partsy/parts-domain';
 
 // In-memory implementation for development/testing
 export class InMemoryPartRepository implements PartRepository {

@@ -140,7 +140,35 @@ This is a **public-facing repository** following Domain-Driven Design principles
 - **Headless components** - Flexible UI components using render props
 - **No default exports** - Named exports for better tree-shaking
 
-## 🧪 Development
+## 🔗 Real API Integration
+
+The SDK is production-ready for real API integration. Currently using mock data for demonstration.
+
+### Quick Setup for Real API
+
+1. **Update environment variables:**
+```bash
+# Disable mock data
+NEXT_PUBLIC_USE_MOCK_DATA=false
+
+# Configure real API
+NEXT_PUBLIC_API_BASE_URL=https://your-api.com/v1
+PARTSY_API_KEY=your-api-key
+```
+
+2. **Use the enhanced client:**
+```typescript
+import { PartsAPIClientFactory } from '@partsy/sdk';
+
+const client = PartsAPIClientFactory.create({
+  environment: 'production',
+  apiKey: process.env.PARTSY_API_KEY
+});
+```
+
+📋 **See [Real API Integration Guide](./docs/REAL_API_INTEGRATION.md) for complete setup instructions.**
+
+📋 **See [API Specification](./docs/api-specification.yaml) for backend requirements.**
 
 ```bash
 # Install dependencies

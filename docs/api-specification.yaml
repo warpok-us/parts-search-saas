@@ -1,0 +1,467 @@
+openapi: 3.0.3
+info:
+  title: Partsy Parts Search API
+  description: REST API for parts search and inventory management
+  version: 1.0.0
+  contact:
+    name: Partsy API Support
+    email: api-support@partsy.com
+
+servers:
+  - url: https://api.partsy.com/v1
+    description: Production server
+  - url: https://api-staging.partsy.com/v1
+    description: Staging server
+  - url: http://localhost:8080/api/v1
+    description: Development server
+
+security:
+  - BearerAuth: []
+
+paths:
+  /parts/search:
+    get:
+      summary: Search parts
+      description: Search and filter parts with pagination support
+      parameters:
+        - name: name
+          in: query
+          description: Filter by part name (partial match)
+          schema:
+            type: string
+        - name: partNumber
+          in: query
+          description: Filter by part number (exact match)
+          schema:
+            type: string
+        - name: category
+          in: query
+          description: Filter by category
+          schema:
+            type: string
+        - name: status
+          in: query
+          description: Filter by status
+          schema:
+            type: string
+            enum: [ACTIVE, INACTIVE, LOW_STOCK, OUT_OF_STOCK]
+        - name: minPrice
+          in: query
+          description: Minimum price filter
+          schema:
+            type: number
+            minimum: 0
+        - name: maxPrice
+          in: query
+          description: Maximum price filter
+          schema:
+            type: number
+            minimum: 0
+        - name: inStock
+          in: query
+          description: Filter for parts in stock (quantity > 0)
+          schema:
+            type: boolean
+        - name: page
+          in: query
+          description: Page number for pagination
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: limit
+          in: query
+          description: Number of items per page
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
+      responses:
+        '200':
+          description: Search results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchPartsResponse'
+        '400':
+          description: Invalid search parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /parts:
+    post:
+      summary: Create a new part
+      description: Add a new part to the inventory
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePartRequest'
+      responses:
+        '201':
+          description: Part created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Part'
+        '400':
+          description: Invalid request data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Part with this part number already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /parts/{id}:
+    get:
+      summary: Get part by ID
+      description: Retrieve a specific part by its ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Part ID
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Part details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Part'
+        '404':
+          description: Part not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    put:
+      summary: Update part
+      description: Update an existing part
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Part ID
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePartRequest'
+      responses:
+        '200':
+          description: Part updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Part'
+        '400':
+          description: Invalid request data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        '404':
+          description: Part not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      summary: Delete part
+      description: Remove a part from the inventory
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Part ID
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Part deleted successfully
+        '404':
+          description: Part not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Part:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique part identifier
+          example: "550e8400-e29b-41d4-a716-446655440000"
+        partNumber:
+          type: string
+          description: Manufacturer part number
+          example: "ENG-001"
+        name:
+          type: string
+          description: Part name
+          example: "V8 Engine Block"
+        description:
+          type: string
+          description: Part description
+          example: "High-performance V8 engine block for sports cars"
+        price:
+          type: number
+          minimum: 0
+          description: Part price in USD
+          example: 2500.00
+        quantity:
+          type: integer
+          minimum: 0
+          description: Available quantity
+          example: 5
+        status:
+          type: string
+          enum: [ACTIVE, INACTIVE, LOW_STOCK, OUT_OF_STOCK]
+          description: Part status
+          example: "ACTIVE"
+        category:
+          type: string
+          description: Part category
+          example: "Engine"
+        createdAt:
+          type: string
+          format: date-time
+          description: Creation timestamp
+          example: "2024-01-15T10:30:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          description: Last update timestamp
+          example: "2024-01-15T10:30:00Z"
+      required:
+        - id
+        - partNumber
+        - name
+        - price
+        - quantity
+        - status
+        - category
+        - createdAt
+        - updatedAt
+
+    CreatePartRequest:
+      type: object
+      properties:
+        partNumber:
+          type: string
+          description: Manufacturer part number (must be unique)
+          example: "ENG-001"
+        name:
+          type: string
+          description: Part name
+          example: "V8 Engine Block"
+        description:
+          type: string
+          description: Part description
+          example: "High-performance V8 engine block for sports cars"
+        price:
+          type: number
+          minimum: 0
+          description: Part price in USD
+          example: 2500.00
+        quantity:
+          type: integer
+          minimum: 0
+          description: Initial quantity
+          example: 5
+        category:
+          type: string
+          description: Part category
+          example: "Engine"
+      required:
+        - partNumber
+        - name
+        - price
+        - quantity
+        - category
+
+    UpdatePartRequest:
+      type: object
+      properties:
+        partNumber:
+          type: string
+          description: Manufacturer part number
+          example: "ENG-001"
+        name:
+          type: string
+          description: Part name
+          example: "V8 Engine Block"
+        description:
+          type: string
+          description: Part description
+          example: "High-performance V8 engine block for sports cars"
+        price:
+          type: number
+          minimum: 0
+          description: Part price in USD
+          example: 2500.00
+        quantity:
+          type: integer
+          minimum: 0
+          description: Available quantity
+          example: 5
+        category:
+          type: string
+          description: Part category
+          example: "Engine"
+
+    SearchPartsResponse:
+      type: object
+      properties:
+        parts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Part'
+          description: Array of parts matching the search criteria
+        total:
+          type: integer
+          minimum: 0
+          description: Total number of parts matching the search
+          example: 150
+        page:
+          type: integer
+          minimum: 1
+          description: Current page number
+          example: 1
+        limit:
+          type: integer
+          minimum: 1
+          description: Number of items per page
+          example: 10
+        totalPages:
+          type: integer
+          minimum: 1
+          description: Total number of pages
+          example: 15
+      required:
+        - parts
+        - total
+        - page
+        - limit
+        - totalPages
+
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Human-readable error message
+          example: "Part not found"
+        code:
+          type: string
+          description: Error code for programmatic handling
+          example: "PART_NOT_FOUND"
+        timestamp:
+          type: string
+          format: date-time
+          description: Error timestamp
+          example: "2024-01-15T10:30:00Z"
+      required:
+        - message
+        - code
+        - timestamp
+
+    ValidationError:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Human-readable error message
+          example: "Validation failed"
+        code:
+          type: string
+          description: Error code
+          example: "VALIDATION_ERROR"
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+                description: Field that failed validation
+                example: "price"
+              message:
+                type: string
+                description: Validation error message
+                example: "Price must be greater than 0"
+              code:
+                type: string
+                description: Validation error code
+                example: "MIN_VALUE"
+        timestamp:
+          type: string
+          format: date-time
+          description: Error timestamp
+          example: "2024-01-15T10:30:00Z"
+      required:
+        - message
+        - code
+        - errors
+        - timestamp

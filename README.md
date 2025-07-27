@@ -1,13 +1,233 @@
-# Turborepo starter
+# Parts Search SaaS
 
-This Turborepo starter is maintained by the Turborepo core team.
+A comprehensive parts search and inventory management SaaS platform built with modern web technologies, clean architecture principles, and SOLID design patterns.
 
-## Using this example
+## 🏗️ Architecture Overview
 
-Run the following command:
+This project exemplifies **SOLID principles** and **Domain-Driven Design (DDD)**, organized as a monorepo using Turborepo. The architecture emphasizes maintainability, testability, and extensibility through dependency injection and strategy patterns.
 
-```sh
-npx create-turbo@latest
+### 🎯 Key Features
+
+- ✅ **SOLID Principles Compliance** - All five principles implemented throughout
+- ✅ **Clean Architecture** - Domain-driven design with clear layer separation
+- ✅ **Strategy Pattern** - Pluggable behaviors for HTTP, retry, auth, and data transformation
+- ✅ **Dependency Injection** - Flexible configuration and easy testing
+- ✅ **Builder Pattern** - Fluent API for complex object construction
+- ✅ **Factory Pattern** - Simplified creation for common use cases
+- ✅ **TypeScript First** - Complete type safety and excellent developer experience
+
+## 🚀 Quick Start
+
+Install the packages you need:
+
+```bash
+# Core SDK for API communication
+pnpm add @partsy/sdk
+
+# Headless UI components and hooks
+pnpm add @partsy/ui
+
+# TypeScript configuration (optional)
+pnpm add -D @partsy/tsconfig
+```
+
+## 📦 Packages
+
+- **`@partsy/sdk`** - Stateless TypeScript client for parts search API
+- **`@partsy/ui`** - Headless React components and hooks with Tailwind styling
+- **`@partsy/parts-domain`** - Domain entities and contracts
+- **`@partsy/shared-utils`** - Shared utilities and helpers
+- **`@partsy/tsconfig`** - Shared TypeScript configuration
+
+## 🔧 Usage
+
+### Basic SDK Usage
+
+```typescript
+import { createPartsAPIClient } from '@partsy/sdk';
+
+const client = createPartsAPIClient({
+  baseUrl: 'https://api.partsy.com',
+  apiKey: 'your-api-key'
+});
+
+// Search for parts
+const results = await client.searchParts({
+  name: 'engine',
+  category: 'automotive',
+  inStock: true
+});
+
+// Get specific part
+const part = await client.getPartById('part-123');
+```
+
+### Headless UI Components
+
+```tsx
+import { PartsSearch, PartCard } from '@partsy/ui';
+import type { PartDTO } from '@partsy/ui';
+
+function MyPartsSearch({ parts }: { parts: PartDTO[] }) {
+  return (
+    <PartsSearch parts={parts}>
+      {({ parts, selectedPart, onPartSelect }) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {parts.map(part => (
+            <PartCard 
+              key={part.id} 
+              part={part}
+              isSelected={selectedPart?.id === part.id}
+              onSelect={onPartSelect}
+            >
+              {({ part, isSelected, onSelect, getStatusColor, formatPrice }) => (
+                <div 
+                  className={`p-4 border rounded-lg cursor-pointer ${
+                    isSelected ? 'ring-2 ring-blue-500' : ''
+                  }`}
+                  onClick={onSelect}
+                >
+                  <h3 className="font-semibold">{part.name}</h3>
+                  <p className="text-sm text-gray-600">{part.partNumber}</p>
+                  <div className="mt-2 flex justify-between items-center">
+                    <span className="font-bold">{formatPrice()}</span>
+                    <span className={`px-2 py-1 rounded text-xs ${getStatusColor()}`}>
+                      {part.status}
+                    </span>
+                  </div>
+                </div>
+              )}
+            </PartCard>
+          ))}
+        </div>
+      )}
+    </PartsSearch>
+  );
+}
+```
+
+### Custom Hooks
+
+```tsx
+import { usePartsSearch, usePartSelection } from '@partsy/ui';
+
+function SearchExample() {
+  const { 
+    results, 
+    loading, 
+    error, 
+    search, 
+    updateCriteria 
+  } = usePartsSearch({ 
+    client,
+    initialCriteria: { inStock: true }
+  });
+
+  const { selectedPart, selectPart, clearSelection } = usePartSelection();
+
+  return (
+    <div>
+      <button onClick={search} disabled={loading}>
+        {loading ? 'Searching...' : 'Search Parts'}
+      </button>
+      
+      {results && (
+        <div>
+          {results.parts.map(part => (
+            <button key={part.id} onClick={() => selectPart(part)}>
+              {part.name} - ${part.price}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+```
+
+## 🏗️ Architecture
+
+This is a **public-facing repository** following Domain-Driven Design principles:
+
+- **Stateless only** - No database credentials or private business logic
+- **ESM + strict TypeScript** - Modern module system with type safety
+- **Headless components** - Flexible UI components using render props
+- **No default exports** - Named exports for better tree-shaking
+
+## 🔗 Real API Integration
+
+The SDK is production-ready for real API integration. Currently using mock data for demonstration.
+
+### Quick Setup for Real API
+
+1. **Update environment variables:**
+```bash
+# Disable mock data
+NEXT_PUBLIC_USE_MOCK_DATA=false
+
+# Configure real API
+NEXT_PUBLIC_API_BASE_URL=https://your-api.com/v1
+PARTSY_API_KEY=your-api-key
+```
+
+2. **Use the enhanced client:**
+```typescript
+import { PartsAPIClientFactory } from '@partsy/sdk';
+
+const client = PartsAPIClientFactory.create({
+  environment: 'production',
+  apiKey: process.env.PARTSY_API_KEY
+});
+```
+
+📋 **See [Real API Integration Guide](./docs/REAL_API_INTEGRATION.md) for complete setup instructions.**
+
+📋 **See [API Specification](./docs/api-specification.yaml) for backend requirements.**
+
+```bash
+# Install dependencies
+pnpm install
+
+# Run tests
+pnpm test
+
+# Build all packages
+pnpm build
+
+# Run linting
+pnpm lint
+
+# Check types
+pnpm check-types
+```
+
+## 📋 Requirements
+
+- Node.js ≥ 18
+- pnpm ≥ 9.0.0
+- React ≥ 18.0.0 (for UI components)
+
+## 🤝 Contributing
+
+1. Follow the established patterns for stateless, public-facing code
+2. Maintain ≥ 90% test coverage
+3. Use Vitest for testing
+4. Components must be headless-friendly with render props
+5. Never include backend secrets or private business logic
+
+## 📄 License
+
+MIT License - see [LICENSE](./LICENSE) for details.
+
+---
+
+**Note**: This public repository contains only the stateless SDK and UI components. The private implementation details, infrastructure, and business logic are maintained separately.
+
+This project demonstrates a clean implementation of Domain-Driven Design (DDD) principles for a parts search and inventory management system.
+
+## Architecture Overview
+
+The project follows DDD principles with clear separation of concerns across multiple layers:
 ```
 
 ## What's inside?

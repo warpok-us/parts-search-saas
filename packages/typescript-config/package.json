@@ -1,8 +1,11 @@
 {
-  "name": "@repo/typescript-config",
+  "name": "@partsy/tsconfig",
   "version": "0.0.0",
-  "private": true,
+  "type": "module",
   "license": "MIT",
+  "files": [
+    "*.json"
+  ],
   "publishConfig": {
     "access": "public"
   }

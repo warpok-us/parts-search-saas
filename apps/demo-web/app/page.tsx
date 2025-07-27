@@ -1,102 +1,334 @@
-import Image from "next/image";
+'use client';
+
+import React from 'react';
+import Link from 'next/link';
+
+// Demo data and interfaces (matching what we have in the demo page)
+interface PartDTO {
+  id: string;
+  partNumber: string;
+  name: string;
+  description?: string;
+  price: number;
+  quantity: number;
+  status: string;
+  category: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+interface DemoFeature {
+  title: string;
+  description: string;
+  href: string;
+  icon: string;
+}
+
+const demoFeatures: DemoFeature[] = [
+  {
+    title: 'Parts Search Demo',
+    description: 'Interactive search with filters, real-time results, and API integration showcase',
+    href: '/demo',
+    icon: '🔍'
+  },
+  {
+    title: 'Real API Integration',
+    description: 'Switch between mock data and real API with comprehensive error handling',
+    href: '/demo',
+    icon: '�'
+  },
+  {
+    title: 'Component Library',
+    description: 'Headless UI components built with TypeScript and modern React patterns',
+    href: '/demo',
+    icon: '🧩'
+  },
+  {
+    title: 'Type Safety',
+    description: 'End-to-end TypeScript with strict typing for DTOs, entities, and components',
+    href: '/demo',
+    icon: '🛡️'
+  }
+];
+
+// Mock data preview (subset of what's available in demo)
+const mockPartsPreview: PartDTO[] = [
+  {
+    id: '1',
+    partNumber: 'ENG-001',
+    name: 'V8 Engine Block',
+    description: 'High-performance V8 engine block for sports cars',
+    price: 2500.00,
+    quantity: 5,
+    status: 'ACTIVE',
+    category: 'Engine',
+    createdAt: new Date(),
+    updatedAt: new Date()
+  },
+  {
+    id: '2',
+    partNumber: 'BRK-002',
+    name: 'Brake Disc Set',
+    description: 'Premium brake disc set for front wheels',
+    price: 150.00,
+    quantity: 20,
+    status: 'ACTIVE',
+    category: 'Brakes',
+    createdAt: new Date(),
+    updatedAt: new Date()
+  },
+  {
+    id: '3',
+    partNumber: 'TIR-003',
+    name: 'All-Season Tire',
+    description: 'Durable all-season tire 225/60R16',
+    price: 89.99,
+    quantity: 100,
+    status: 'ACTIVE',
+    category: 'Tires',
+    createdAt: new Date(),
+    updatedAt: new Date()
+  }
+];
 
 export default function Home() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Hero Section */}
+        <section className="text-center mb-16">
+          <h1 className="text-5xl font-bold text-gray-900 mb-6">
+            Parts Search SaaS
+          </h1>
+          <p className="text-2xl text-gray-600 mb-4">
+            Domain-Driven Design Demo Platform
+          </p>
+          <p className="text-lg text-gray-500 max-w-3xl mx-auto mb-8">
+            Explore our modern e-commerce parts search system built with Next.js, TypeScript, 
+            and clean architecture principles. Featuring real-time search, component reusability, 
+            and type-safe data flow.
+          </p>
+          <div className="flex justify-center space-x-4">
+            <Link 
+              href="/demo"
+              className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg transition-colors shadow-lg"
+            >
+              Try Interactive Demo
+            </Link>
+            <a 
+              href="#features"
+              className="bg-white hover:bg-gray-50 text-gray-900 font-bold py-3 px-8 rounded-lg transition-colors shadow-lg border border-gray-200"
+            >
+              Learn More
+            </a>
+          </div>
+        </section>
+        {/* Quick Demo Access */}
+        <section className="mb-16">
+          <div className="bg-white rounded-2xl shadow-xl p-8 border border-blue-200">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                🚀 Try the Interactive Demo
+              </h2>
+              <p className="text-gray-600 mb-6">
+                Experience our parts search system with live data and interactive components
+              </p>
+              <Link 
+                href="/demo"
+                className="inline-flex items-center px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+              >
+                <span className="mr-2">🔍</span>
+                Launch Parts Search Demo
+              </Link>
+            </div>
+          </div>
+        </section>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
+        {/* Features Grid */}
+        <section id="features" className="mb-16">
+          <h2 className="text-3xl font-bold text-gray-900 text-center mb-12">
+            Platform Features
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {demoFeatures.map((feature, index) => (
+              <Link 
+                key={index}
+                href={feature.href}
+                className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-200 hover:border-blue-300"
+              >
+                <div className="text-4xl mb-4">{feature.icon}</div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                  {feature.title}
+                </h3>
+                <p className="text-gray-600">
+                  {feature.description}
+                </p>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        {/* API Integration Section */}
+        <section className="mb-16">
+          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-200">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                🌐 Real API Integration Ready
+              </h2>
+              <p className="text-gray-600 mb-6 max-w-3xl mx-auto">
+                Our SDK is production-ready for real API integration. Switch seamlessly between mock data 
+                for development and real backend services for production with comprehensive error handling 
+                and retry logic.
+              </p>
+            </div>
+            
+            <div className="grid md:grid-cols-2 gap-8">
+              <div className="bg-white rounded-lg p-6 shadow-md">
+                <div className="flex items-center mb-4">
+                  <span className="text-2xl mr-3">🧪</span>
+                  <h3 className="text-xl font-semibold text-gray-900">Development Mode</h3>
+                </div>
+                <p className="text-gray-600 mb-4">
+                  Currently running with mock data for demonstration. Perfect for development, 
+                  testing, and showcasing functionality without backend dependencies.
+                </p>
+                <div className="bg-yellow-50 border border-yellow-200 rounded-md p-3">
+                  <code className="text-sm text-yellow-800">NEXT_PUBLIC_USE_MOCK_DATA=true</code>
+                </div>
+              </div>
+              
+              <div className="bg-white rounded-lg p-6 shadow-md">
+                <div className="flex items-center mb-4">
+                  <span className="text-2xl mr-3">🚀</span>
+                  <h3 className="text-xl font-semibold text-gray-900">Production Ready</h3>
+                </div>
+                <p className="text-gray-600 mb-4">
+                  Switch to real API integration with a simple environment variable change. 
+                  Includes authentication, error handling, and retry logic out of the box.
+                </p>
+                <div className="bg-green-50 border border-green-200 rounded-md p-3">
+                  <code className="text-sm text-green-800">NEXT_PUBLIC_USE_MOCK_DATA=false</code>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Sample Data Preview */}
+        <section className="mb-16">
+          <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-200">
+            <h2 className="text-3xl font-bold text-gray-900 text-center mb-8">
+              Sample Parts Data
+            </h2>
+            <p className="text-gray-600 text-center mb-8">
+              Here&apos;s a preview of the test data available in our demo. 
+              Click &quot;Launch Demo&quot; to interact with the full dataset and search functionality.
+            </p>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+              {mockPartsPreview.map((part) => (
+                <div key={part.id} className="border border-gray-200 rounded-lg p-6 bg-gray-50 hover:bg-gray-100 transition-colors">
+                  <div className="flex justify-between items-start mb-4">
+                    <h4 className="text-lg font-semibold text-gray-900">{part.name}</h4>
+                    <span className="text-sm font-mono bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                      {part.partNumber}
+                    </span>
+                  </div>
+                  
+                  <p className="text-gray-600 mb-4 text-sm">{part.description}</p>
+                  
+                  <div className="grid grid-cols-2 gap-3 text-sm">
+                    <div className="flex justify-between">
+                      <span className="font-medium text-gray-700">Price:</span>
+                      <span className="font-bold text-green-600">${part.price.toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="font-medium text-gray-700">Stock:</span>
+                      <span className={part.quantity > 0 ? 'text-green-600' : 'text-red-600'}>
+                        {part.quantity}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="font-medium text-gray-700">Category:</span>
+                      <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">
+                        {part.category}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="font-medium text-gray-700">Status:</span>
+                      <span className="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">
+                        {part.status}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="text-center">
+              <Link 
+                href="/demo"
+                className="inline-flex items-center px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors"
+              >
+                View All Parts & Search Features →
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* Architecture Overview */}
+        <section>
+          <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-200">
+            <h2 className="text-3xl font-bold text-gray-900 text-center mb-8">
+              Technical Architecture
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="text-center">
+                <div className="bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl">🎨</span>
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-3">Presentation Layer</h3>
+                <p className="text-gray-600">
+                  Next.js 15 with React 19, TypeScript, and Tailwind CSS for modern, responsive UI components
+                </p>
+              </div>
+              <div className="text-center">
+                <div className="bg-green-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl">⚙️</span>
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-3">Application Layer</h3>
+                <p className="text-gray-600">
+                  Use cases, DTOs, and service orchestration following clean architecture principles
+                </p>
+              </div>
+              <div className="text-center">
+                <div className="bg-purple-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl">🗄️</span>
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-3">Domain & Infrastructure</h3>
+                <p className="text-gray-600">
+                  Rich domain models, repositories, and infrastructure adapters with dependency inversion
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white py-12 mt-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h3 className="text-2xl font-bold mb-4">Ready to Explore?</h3>
+            <p className="text-gray-300 mb-6">
+              Dive into the interactive demo to see how all components work together
+            </p>
+            <Link 
+              href="/demo"
+              className="inline-flex items-center px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors"
+            >
+              Start Interactive Demo
+            </Link>
+          </div>
+        </div>
       </footer>
     </div>
   );

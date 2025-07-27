@@ -1,0 +1,21 @@
+# OpenAPI Generator configuration for @partsy/sdk
+# This config generates TypeScript client from OpenAPI spec (imported from private repo via CI)
+
+generator-name: typescript-fetch
+input-spec: openapi.yaml  # This file is imported from private repo via CI artifact
+output-dir: ./src/generated
+additional-properties:
+  typescriptThreePlus: true
+  modelPropertyNaming: camelCase
+  removeOperationIdPrefix: true
+  useSingleRequestParameter: true
+  withInterfaces: true
+  
+files:
+  model/index.ts: model-index-mustache
+  api/index.ts: api-index-mustache
+  index.ts: index-mustache
+
+# Note: The openapi.yaml is maintained in the private repository
+# and contains the actual API surface. This public SDK is generated
+# from that specification to ensure type safety and consistency.

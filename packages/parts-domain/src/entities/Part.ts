@@ -1,4 +1,4 @@
-import { AggregateRoot, DomainEvent } from '../../../shared-kernel/src';
+import { AggregateRoot, DomainEvent } from '@partsy/shared-utils';
 import { 
   PartId, 
   PartNumber, 
@@ -7,7 +7,7 @@ import {
   Quantity, 
   PartStatus, 
   Category 
-} from '../value-objects';
+} from '../value-objects/index.js';
 
 export interface PartCreatedEvent extends DomainEvent {
   eventType: 'PartCreated';

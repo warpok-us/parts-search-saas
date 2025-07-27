@@ -1,6 +1,6 @@
-import { Result } from '../../../shared-kernel/src';
-import { Part } from '../entities/Part';
-import { PartId, PartNumber } from '../value-objects';
+import { Result } from '@partsy/shared-utils';
+import { Part } from '../entities/Part.js';
+import { PartId, PartNumber } from '../value-objects/index.js';
 
 export interface SearchCriteria {
   name?: string;

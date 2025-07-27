@@ -17,14 +17,10 @@
     "target": "ES2022",
     "baseUrl": ".",
     "paths": {
-      "@parts-domain": ["packages/parts-domain/src"],
-      "@parts-application": ["packages/parts-application/src"],
-      "@parts-infrastructure": ["packages/parts-infrastructure/src"],
-      "@shared-kernel": ["packages/shared-kernel/src"],
       "@partsy/parts-domain": ["packages/parts-domain/src"],
-      "@partsy/parts-application": ["packages/parts-application/src"],
-      "@partsy/parts-infrastructure": ["packages/parts-infrastructure/src"],
-      "@partsy/shared-kernel": ["packages/shared-kernel/src"]
+      "@partsy/sdk": ["packages/parts-sdk/src"],
+      "@partsy/ui": ["packages/parts-ui/src"],
+      "@partsy/shared-utils": ["packages/shared-kernel/src"]
     }
   }
 }

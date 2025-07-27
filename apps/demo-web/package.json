@@ -13,10 +13,8 @@
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "next": "15.4.4",
-    "@partsy/parts-ui": "workspace:*",
-    "@partsy/parts-sdk": "workspace:*",
-    "@partsy/parts-application": "workspace:*",
-    "@partsy/parts-infrastructure": "workspace:*"
+    "@partsy/ui": "workspace:*",
+    "@partsy/sdk": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5",

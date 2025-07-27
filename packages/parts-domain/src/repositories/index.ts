@@ -1,1 +1,1 @@
-export * from './PartRepository';
+export * from './PartRepository.js';

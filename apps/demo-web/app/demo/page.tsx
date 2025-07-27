@@ -172,7 +172,7 @@ export default function PartsDemo() {
     }
   };
 
-  const handleInputChange = (field: keyof SearchPartsDTO, value: string | number | boolean) => {
+  const handleInputChange = (field: keyof SearchPartsDTO, value: string | number | boolean | undefined) => {
     setSearchCriteria(prev => ({
       ...prev,
       [field]: value
@@ -237,7 +237,10 @@ export default function PartsDemo() {
                 placeholder="0.00"
                 className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={searchCriteria.minPrice || ''}
-                onChange={(e) => handleInputChange('minPrice', parseFloat(e.target.value) || undefined)}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  handleInputChange('minPrice', value ? parseFloat(value) : undefined);
+                }}
               />
             </div>
             <div>
@@ -247,7 +250,10 @@ export default function PartsDemo() {
                 placeholder="999.99"
                 className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={searchCriteria.maxPrice || ''}
-                onChange={(e) => handleInputChange('maxPrice', parseFloat(e.target.value) || undefined)}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  handleInputChange('maxPrice', value ? parseFloat(value) : undefined);
+                }}
               />
             </div>
             <div className="flex items-end">

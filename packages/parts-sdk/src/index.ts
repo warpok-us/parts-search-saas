@@ -3,7 +3,7 @@ import {
   SearchPartsDTO, 
   PartDTO, 
   SearchPartsResponseDTO 
-} from '../../../parts-application/src/dtos';
+} from '@partsy/parts-application';
 
 export interface PartsAPIConfig {
   baseUrl: string;
@@ -89,4 +89,4 @@ export type {
   SearchPartsDTO,
   PartDTO,
   SearchPartsResponseDTO
-} from '../../../parts-application/src/dtos';
+} from '@partsy/parts-application';

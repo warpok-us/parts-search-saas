@@ -1,5 +1,3 @@
-'use client';
-
 import React, { useState } from 'react';
 
 // Define interfaces to avoid imports since we're having dependency issues

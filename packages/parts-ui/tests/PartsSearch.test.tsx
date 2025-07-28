@@ -1,6 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { PartsSearch, type PartDTO } from '../src/components/PartsSearch.js';
+import { PartsSearch } from '../src/components/PartsSearch.js';
+import type { PartDTO } from '@partsy/sdk';
 import React from 'react';
 
 const mockParts: PartDTO[] = [

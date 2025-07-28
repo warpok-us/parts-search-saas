@@ -1,26 +1,62 @@
-# Quick Reference Guide - SOLID Patterns & Best Practices
+# Quick Reference - Daily Development
 
-## 🚀 Quick Start Commands
+## 🚀 Commands
 
 ```bash
 # Setup
 pnpm install && pnpm build
 
 # Development
-pnpm dev --filter demo-web    # Start demo app
-pnpm dev --filter docs        # Start docs site
+pnpm dev --filter demo-web    # Start demo
+pnpm dev --filter docs        # Start docs
 
-# Testing
-pnpm test                     # Run all tests
-pnpm test --filter @partsy/sdk  # Test specific package
-
-# Building
-pnpm build                    # Build all packages
-pnpm build --filter @partsy/sdk # Build specific package
-
-# Quality Checks
-pnpm lint                     # Lint all code
+# Testing & Quality
+pnpm test                     # All tests
+pnpm lint                     # Lint code
 pnpm type-check              # TypeScript validation
+```
+
+## 📦 Package Usage
+
+### Install Dependencies
+```bash
+# Core packages
+pnpm add @partsy/sdk @partsy/ui
+
+# Development tools  
+pnpm add -D @partsy/tsconfig @partsy/eslint-config
+```
+
+### Basic API Client
+```typescript
+import { PartsAPIClientFactory } from '@partsy/sdk';
+
+// Simple setup
+const client = PartsAPIClientFactory.create({
+  environment: 'development',
+  apiKey: 'your-key'
+});
+
+// Mock for testing
+const mockClient = PartsAPIClientFactory.createWithMockData();
+```
+
+### React Components
+```tsx
+import { usePartsSearch } from '@partsy/ui';
+
+function SearchComponent() {
+  const { results, loading, search } = usePartsSearch({ client });
+  
+  return (
+    <div>
+      <input onChange={(e) => search({ query: e.target.value })} />
+      {results?.parts.map(part => (
+        <div key={part.id}>{part.name} - ${part.price}</div>
+      ))}
+    </div>
+  );
+}
 ```
 
 ## 🏗️ SOLID Patterns Quick Reference

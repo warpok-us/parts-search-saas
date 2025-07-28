@@ -1,103 +1,206 @@
-# Development Guide - Parts Search SaaS
+# Development Guide
 
-## Table of Contents
-1. [Architecture Overview](#architecture-overview)
-2. [Development Workflow](#development-workflow)
-3. [Adding New Features](#adding-new-features)
-4. [Testing Strategy](#testing-strategy)
-5. [Code Quality Guidelines](#code-quality-guidelines)
-6. [Common Patterns](#common-patterns)
-7. [Troubleshooting](#troubleshooting)
-
-## Architecture Overview
-
-### Monorepo Structure
-```
-parts-search-saas/
-├── apps/
-│   ├── demo-web/          # Next.js demo application
-│   ├── docs/              # Documentation site
-│   └── web/               # Main web application
-├── packages/
-│   ├── parts-sdk/         # 🎯 Core SDK (SOLID architecture)
-│   ├── parts-domain/      # Domain entities and logic
-│   ├── parts-application/ # Use cases and DTOs
-│   ├── parts-infrastructure/ # External adapters
-│   ├── parts-ui/          # Shared React components
-│   ├── shared-kernel/     # Common utilities
-│   └── typescript-config/ # Shared TypeScript configs
-└── docs/                  # Project documentation
-```
-
-### Domain-Driven Design Layers
-
-1. **Domain Layer** (`packages/parts-domain/`)
-   - Pure business logic
-   - No external dependencies
-   - Entities, Value Objects, Domain Services
-
-2. **Application Layer** (`packages/parts-application/`)
-   - Use cases and orchestration
-   - DTOs for data transfer
-   - Interfaces for repositories
-
-3. **Infrastructure Layer** (`packages/parts-infrastructure/`)
-   - External adapters (databases, APIs)
-   - Implementation of repository interfaces
-   - Framework-specific code
-
-4. **Presentation Layer** (`apps/*/`, `packages/parts-ui/`)
-   - User interfaces
-   - Controllers and API endpoints
-   - React components and pages
-
-## Development Workflow
-
-### 1. Setting Up Development Environment
+## Quick Setup
 
 ```bash
-# Clone and install dependencies
 git clone <repo-url>
 cd parts-search-saas
 pnpm install
+pnpm build
+pnpm dev
+```
 
+## Monorepo Commands
+
+```bash
 # Build all packages
 pnpm build
 
-# Start development servers
-pnpm dev  # Starts all apps in development mode
-# OR for specific app:
-pnpm dev --filter demo-web
-```
-
-### 2. Branch Strategy
-
-```bash
-# Feature development
-git checkout -b feature/add-new-search-filter
-git checkout -b bugfix/fix-retry-logic
-git checkout -b refactor/improve-caching
-
-# Always branch from development
-git checkout development
-git pull origin development
-git checkout -b feature/your-feature-name
-```
-
-### 3. Development Commands
-
-```bash
 # Build specific package
 pnpm build --filter @partsy/sdk
 
-# Run tests
+# Run all tests
 pnpm test
-pnpm test --filter @partsy/sdk
 
-# Type checking
+# Test specific package
+pnpm test --filter @partsy/parts-domain
+
+# Type check everything
 pnpm type-check
 
-# Linting
+# Start demo app
+pnpm dev --filter demo-web
+```
+
+## Architecture Layers
+
+```
+Domain (packages/parts-domain)
+  ↑
+Application (packages/parts-application)  
+  ↑
+Infrastructure (packages/parts-infrastructure)
+  ↑
+Presentation (apps/*, packages/parts-ui)
+```
+
+**Rule**: Dependencies flow inward. Domain has no dependencies.
+
+## Adding New Features
+
+### 1. Domain First
+Add entities and business rules in `packages/parts-domain/`:
+
+```typescript
+// src/entities/Part.ts
+export class Part {
+  constructor(
+    private id: PartId,
+    private name: string,
+    private category: Category
+  ) {}
+}
+```
+
+### 2. Application Use Cases
+Define operations in `packages/parts-application/`:
+
+```typescript
+// src/use-cases/SearchPartsUseCase.ts
+export class SearchPartsUseCase {
+  constructor(private repository: PartsRepository) {}
+  
+  async execute(criteria: SearchCriteria): Promise<Part[]> {
+    return this.repository.search(criteria);
+  }
+}
+```
+
+### 3. Infrastructure Implementation
+Implement repositories in `packages/parts-infrastructure/`:
+
+```typescript
+// src/repositories/PostgresPartsRepository.ts
+export class PostgresPartsRepository implements PartsRepository {
+  async search(criteria: SearchCriteria): Promise<Part[]> {
+    // Database implementation
+  }
+}
+```
+
+### 4. UI Integration
+Use in React components with `packages/parts-ui/`:
+
+```typescript
+// src/hooks/useSearchParts.ts
+export function useSearchParts() {
+  const [searchUseCase] = useState(() => 
+    new SearchPartsUseCase(new PostgresPartsRepository())
+  );
+  
+  return useMutation({
+    mutationFn: (criteria: SearchCriteria) => searchUseCase.execute(criteria)
+  });
+}
+```
+
+## Testing Strategy
+
+```bash
+# Unit tests - Domain layer
+pnpm test --filter @partsy/parts-domain
+
+# Integration tests - Application layer  
+pnpm test --filter @partsy/parts-application
+
+# E2E tests - Demo app
+pnpm test --filter demo-web
+```
+
+## Code Quality
+
+- **TypeScript strict mode** - All packages use strict configuration
+- **ESLint + Prettier** - Consistent code formatting
+- **Vitest** - Fast unit and integration testing
+- **Turbo** - Optimized builds and caching
+
+## Common Patterns
+
+### Dependency Injection
+```typescript
+// ✅ Good - inject dependencies
+class UseCase {
+  constructor(private repository: Repository) {}
+}
+
+// ❌ Bad - direct instantiation
+class UseCase {
+  private repository = new ConcreteRepository();
+}
+```
+
+### Error Handling
+```typescript
+// Domain errors
+class InvalidPartIdError extends Error {
+  constructor(id: string) {
+    super(`Invalid part ID: ${id}`);
+  }
+}
+
+// Application error handling
+try {
+  await useCase.execute(params);
+} catch (error) {
+  if (error instanceof InvalidPartIdError) {
+    // Handle domain error
+  }
+}
+```
+
+### Repository Pattern
+```typescript
+// Interface in domain
+interface PartsRepository {
+  findById(id: PartId): Promise<Part | null>;
+  save(part: Part): Promise<void>;
+}
+
+// Implementation in infrastructure
+class PostgresPartsRepository implements PartsRepository {
+  // Concrete implementation
+}
+```
+
+## Troubleshooting
+
+### Build Issues
+```bash
+# Clean and rebuild
+pnpm clean
+pnpm build
+
+# Check for circular dependencies
+pnpm build --filter @partsy/sdk --verbose
+```
+
+### Type Errors
+```bash
+# Check types without building
+pnpm type-check
+
+# Check specific package
+pnpm type-check --filter @partsy/parts-domain
+```
+
+### Package Dependencies
+```bash
+# View dependency graph
+pnpm list --depth=1
+
+# Check for duplicates
+pnpm dedupe
+```
 pnpm lint
 pnpm lint:fix
 

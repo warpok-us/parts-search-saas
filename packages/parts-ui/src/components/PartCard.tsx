@@ -1,18 +1,5 @@
 import React from 'react';
-
-// Local type definitions to avoid circular dependencies
-export interface PartDTO {
-  id: string;
-  partNumber: string;
-  name: string;
-  description?: string;
-  price: number;
-  quantity: number;
-  status: 'ACTIVE' | 'INACTIVE' | 'LOW_STOCK' | 'OUT_OF_STOCK';
-  category: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
+import type { PartDTO } from '@partsy/sdk';
 
 export interface PartCardRenderProps {
   part: PartDTO;

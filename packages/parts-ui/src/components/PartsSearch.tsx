@@ -1,18 +1,5 @@
 import React from 'react';
-
-// Types that mirror @partsy/sdk but are defined locally to avoid circular deps during build
-export interface PartDTO {
-  id: string;
-  partNumber: string;
-  name: string;
-  description?: string;
-  price: number;
-  quantity: number;
-  status: 'ACTIVE' | 'INACTIVE' | 'LOW_STOCK' | 'OUT_OF_STOCK';
-  category: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
+import type { PartDTO } from '@partsy/sdk';
 
 export interface PartsSearchRenderProps {
   parts: PartDTO[];

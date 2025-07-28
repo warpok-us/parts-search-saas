@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { PartCard, type PartDTO } from '../src/components/PartCard.js';
+import { PartCard } from '../src/components/PartCard.js';
+import type { PartDTO } from '@partsy/sdk';
 import React from 'react';
 
 const mockPart: PartDTO = {

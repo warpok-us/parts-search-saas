@@ -117,8 +117,6 @@ pnpm build --filter @partsy/sdk
 ## 🚀 Applications
 
 - **[demo-web](./apps/demo-web/)** - Parts search demo with mock data
-- **[docs](./apps/docs/)** - Documentation site
-- **[web](./apps/web/)** - Main application (TBD)
 
 ## 📄 License
 

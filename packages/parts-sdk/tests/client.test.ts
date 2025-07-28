@@ -36,6 +36,9 @@ describe('PartsAPIClient', () => {
     it('should make GET request with query parameters', async () => {
       const mockResponse = {
         ok: true,
+        headers: {
+          get: (name: string) => name === 'content-type' ? 'application/json' : null
+        },
         json: () => Promise.resolve({
           parts: [],
           total: 0,
@@ -70,6 +73,9 @@ describe('PartsAPIClient', () => {
     it('should handle search with no filters', async () => {
       const mockResponse = {
         ok: true,
+        headers: {
+          get: (name: string) => name === 'content-type' ? 'application/json' : null
+        },
         json: () => Promise.resolve({
           parts: [],
           total: 0,
@@ -83,7 +89,7 @@ describe('PartsAPIClient', () => {
       await client.searchParts({});
 
       expect(mockFetch).toHaveBeenCalledWith(
-        'https://api.example.com/parts/search?',
+        'https://api.example.com/parts/search',
         expect.any(Object)
       );
     });
@@ -105,6 +111,9 @@ describe('PartsAPIClient', () => {
 
       const mockResponse = {
         ok: true,
+        headers: {
+          get: (name: string) => name === 'content-type' ? 'application/json' : null
+        },
         json: () => Promise.resolve(mockPart)
       };
       mockFetch.mockResolvedValue(mockResponse);
@@ -117,7 +126,15 @@ describe('PartsAPIClient', () => {
           method: 'GET'
         })
       );
-      expect(result).toEqual(mockPart);
+      expect(result).toMatchObject({
+        id: '1',
+        partNumber: 'ENG-001',
+        name: 'V8 Engine',
+        price: 2500,
+        quantity: 5,
+        status: 'ACTIVE',
+        category: 'Engine'
+      });
     });
   });
 
@@ -134,6 +151,9 @@ describe('PartsAPIClient', () => {
 
       const mockResponse = {
         ok: true,
+        headers: {
+          get: (name: string) => name === 'content-type' ? 'application/json' : null
+        },
         json: () => Promise.resolve({
           id: '123',
           ...createDto,

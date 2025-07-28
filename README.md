@@ -1,20 +1,128 @@
 # Parts Search SaaS
 
-A comprehensive parts search and inventory management SaaS platform built with modern web technologies, clean architecture principles, and SOLID design patterns.
+A comprehensive parts search and inventory management platform built with TypeScript, React, and clean architecture principles.
 
-## 🏗️ Architecture Overview
+## 🚀 Quick Start
 
-This project exemplifies **SOLID principles** and **Domain-Driven Design (DDD)**, organized as a monorepo using Turborepo. The architecture emphasizes maintainability, testability, and extensibility through dependency injection and strategy patterns.
+```bash
+# Install dependencies
+pnpm install
 
-### 🎯 Key Features
+# Build all packages
+pnpm build
 
-- ✅ **SOLID Principles Compliance** - All five principles implemented throughout
-- ✅ **Clean Architecture** - Domain-driven design with clear layer separation
-- ✅ **Strategy Pattern** - Pluggable behaviors for HTTP, retry, auth, and data transformation
-- ✅ **Dependency Injection** - Flexible configuration and easy testing
-- ✅ **Builder Pattern** - Fluent API for complex object construction
-- ✅ **Factory Pattern** - Simplified creation for common use cases
-- ✅ **TypeScript First** - Complete type safety and excellent developer experience
+# Start demo application
+pnpm dev --filter demo-web
+```
+
+Visit [http://localhost:3001](http://localhost:3001) to see the demo.
+
+## 📦 Packages
+
+### Core Libraries
+- **[@partsy/sdk](./packages/parts-sdk/)** - TypeScript API client with SOLID architecture
+- **[@partsy/ui](./packages/parts-ui/)** - React components and hooks for parts search
+- **[@partsy/shared-utils](./packages/shared-kernel/)** - Shared utilities and helpers
+
+### Domain & Application
+- **[@partsy/parts-domain](./packages/parts-domain/)** - Business entities and rules
+- **[@partsy/parts-application](./packages/parts-application/)** - Use cases and DTOs
+- **[@partsy/parts-infrastructure](./packages/parts-infrastructure/)** - External adapters
+
+### Configuration
+- **[@partsy/tsconfig](./packages/typescript-config/)** - Shared TypeScript configs
+- **[@partsy/eslint-config](./packages/eslint-config/)** - ESLint configurations
+
+## 🔧 Usage
+
+### Install Packages
+
+```bash
+# For application development
+pnpm add @partsy/sdk @partsy/ui
+
+# For configuration
+pnpm add -D @partsy/tsconfig @partsy/eslint-config
+```
+
+### Basic API Client
+
+```typescript
+import { PartsAPIClientFactory } from '@partsy/sdk';
+
+const client = PartsAPIClientFactory.create({
+  environment: 'development',
+  apiKey: 'your-api-key'
+});
+
+const parts = await client.searchParts({ query: 'resistor' });
+```
+
+### React Components
+
+```tsx
+import { usePartsSearch } from '@partsy/ui';
+
+function SearchDemo() {
+  const { results, loading, search } = usePartsSearch({ client });
+  
+  return (
+    <div>
+      <button onClick={() => search({ query: 'capacitor' })}>
+        Search Parts
+      </button>
+      {loading && <p>Loading...</p>}
+      {results?.parts.map(part => (
+        <div key={part.id}>{part.name} - ${part.price}</div>
+      ))}
+    </div>
+  );
+}
+```
+
+## 🏗️ Architecture
+
+This project follows **Domain-Driven Design** with **SOLID principles**:
+
+- **Domain Layer**: Pure business logic (entities, value objects)
+- **Application Layer**: Use cases and orchestration
+- **Infrastructure Layer**: External adapters (APIs, databases)
+- **Presentation Layer**: UI components and applications
+
+Key patterns: Strategy, Factory, Builder, Dependency Injection.
+
+## 🧪 Development
+
+```bash
+# Run tests
+pnpm test
+
+# Type checking
+pnpm type-check
+
+# Linting
+pnpm lint
+
+# Build specific package
+pnpm build --filter @partsy/sdk
+```
+
+## 📚 Documentation
+
+- **[Development Guide](./docs/DEVELOPMENT_GUIDE.md)** - Complete development practices
+- **[API Integration](./docs/REAL_API_INTEGRATION.md)** - Connect to real backend
+- **[Quick Reference](./docs/QUICK_REFERENCE.md)** - Common patterns and commands
+- **[Architecture Details](./docs/SOLID_PRINCIPLES_REFACTORING.md)** - SOLID implementation
+
+## 🚀 Applications
+
+- **[demo-web](./apps/demo-web/)** - Parts search demo with mock data
+- **[docs](./apps/docs/)** - Documentation site
+- **[web](./apps/web/)** - Main application (TBD)
+
+## 📄 License
+
+MIT License - see [LICENSE](LICENSE) for details.
 
 ## 🚀 Quick Start
 

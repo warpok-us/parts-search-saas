@@ -1,53 +1,124 @@
-# SDK Extension Guide - Adding New Features
+# SDK Extension Guide
 
-## Overview
+Quick reference for extending the SDK with new implementations.
 
-This guide demonstrates how to extend the Parts SDK while maintaining SOLID principles and clean architecture. Each example shows the complete implementation from contracts to concrete classes.
+## Adding HTTP Clients
 
-## 🔧 Adding New HTTP Client Implementations
-
-### Example: Adding Node.js HTTP Client
-
-**Step 1: Define Requirements**
-- Support Node.js environment
-- Handle server-side HTTP requests
-- Maintain same interface as FetchHttpClient
-
-**Step 2: Implement the Strategy**
 ```typescript
-// packages/parts-sdk/src/infrastructure/http/NodeHttpClient.ts
-import { createRequire } from 'module';
-import type { HttpClient, HttpRequestOptions, HttpResponse } from '../../contracts';
+// packages/parts-sdk/src/infrastructure/http/MyHttpClient.ts
+import { HttpClient, HttpRequestOptions, HttpResponse } from '../../contracts';
 
-const require = createRequire(import.meta.url);
-const https = require('https');
-const http = require('http');
-
-export class NodeHttpClient implements HttpClient {
-  constructor(
-    private defaultTimeout: number = 5000,
-    private keepAlive: boolean = true
-  ) {}
-
+export class MyHttpClient implements HttpClient {
   async request<T>(options: HttpRequestOptions): Promise<HttpResponse<T>> {
-    return new Promise((resolve, reject) => {
-      const url = new URL(options.url);
-      const isHttps = url.protocol === 'https:';
-      const httpModule = isHttps ? https : http;
-      
-      const requestOptions = {
-        hostname: url.hostname,
-        port: url.port || (isHttps ? 443 : 80),
-        path: url.pathname + url.search,
-        method: options.method,
-        headers: {
-          'Content-Type': 'application/json',
-          ...options.headers
-        },
-        timeout: options.timeout || this.defaultTimeout
-      };
+    // Your implementation
+    return { data, status: 200, headers: {} };
+  }
+}
+```
 
-      const req = httpModule.request(requestOptions, (res: any) => {
+Export in `infrastructure/index.ts`:
+```typescript
+export { MyHttpClient } from './http/MyHttpClient';
+```
+
+## Adding Retry Strategies
+
+```typescript
+// packages/parts-sdk/src/infrastructure/retry/MyRetryStrategy.ts
+import { RetryStrategy, RetryContext } from '../../contracts';
+
+export class MyRetryStrategy implements RetryStrategy {
+  async shouldRetry(context: RetryContext): Promise<boolean> {
+    // Your retry logic
+    return context.attempt < 3;
+  }
+
+  async getDelay(context: RetryContext): Promise<number> {
+    // Your delay calculation
+    return 1000 * context.attempt;
+  }
+}
+```
+
+## Adding Authentication
+
+```typescript
+// packages/parts-sdk/src/infrastructure/auth/MyAuthStrategy.ts
+import { AuthenticationStrategy, HttpRequestOptions } from '../../contracts';
+
+export class MyAuthStrategy implements AuthenticationStrategy {
+  async authenticate(options: HttpRequestOptions): Promise<HttpRequestOptions> {
+    return {
+      ...options,
+      headers: {
+        ...options.headers,
+        'Authorization': 'Bearer your-token'
+      }
+    };
+  }
+}
+```
+
+## Adding Data Transformers
+
+```typescript
+// packages/parts-sdk/src/infrastructure/transformers/MyTransformer.ts
+import { DataTransformer } from '../../contracts';
+
+export class MyTransformer<T, U> implements DataTransformer<T, U> {
+  transform(input: T): U {
+    // Your transformation logic
+    return transformedData;
+  }
+}
+```
+
+## Testing New Implementations
+
+```typescript
+// packages/parts-sdk/tests/MyHttpClient.test.ts
+import { describe, it, expect } from 'vitest';
+import { MyHttpClient } from '../src/infrastructure';
+
+describe('MyHttpClient', () => {
+  it('should make HTTP requests', async () => {
+    const client = new MyHttpClient();
+    const response = await client.request({
+      url: 'https://api.example.com/test',
+      method: 'GET'
+    });
+    
+    expect(response.status).toBe(200);
+  });
+});
+```
+
+## Integration with Builder
+
+Add your implementations to the builder:
+
+```typescript
+// packages/parts-sdk/src/client/PartsAPIClientBuilder.ts
+export class PartsAPIClientBuilder {
+  withMyHttpClient(): PartsAPIClientBuilder {
+    this.httpClient = new MyHttpClient();
+    return this;
+  }
+
+  withMyRetryStrategy(): PartsAPIClientBuilder {
+    this.retryStrategy = new MyRetryStrategy();
+    return this;
+  }
+}
+```
+
+## Best Practices
+
+1. **Implement the interface completely** - Don't leave methods unimplemented
+2. **Add comprehensive tests** - Cover edge cases and error scenarios
+3. **Export from infrastructure/index.ts** - Make it available to consumers
+4. **Update builder if needed** - Add convenience methods for common usage
+5. **Document your implementation** - Add JSDoc comments explaining behavior
         let data = '';
         
         res.on('data', (chunk: any) => {

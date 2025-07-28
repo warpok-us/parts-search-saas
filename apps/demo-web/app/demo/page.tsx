@@ -89,7 +89,7 @@ function DemoContent({ client, isUsingMockData }: APIContextType) {
                 type="text"
                 value={searchCriteria.name || ''}
                 onChange={(e) => handleFilterChange('name', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
                 placeholder="Search by name..."
               />
             </div>
@@ -101,7 +101,7 @@ function DemoContent({ client, isUsingMockData }: APIContextType) {
               <select
                 value={searchCriteria.category || ''}
                 onChange={(e) => handleFilterChange('category', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
               >
                 <option value="">All Categories</option>
                 <option value="Engine">Engine</option>
@@ -119,7 +119,7 @@ function DemoContent({ client, isUsingMockData }: APIContextType) {
               <select
                 value={searchCriteria.status || ''}
                 onChange={(e) => handleFilterChange('status', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
               >
                 <option value="">All Status</option>
                 <option value="ACTIVE">Active</option>
